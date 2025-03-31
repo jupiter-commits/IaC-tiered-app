@@ -23,7 +23,9 @@ resource "aws_vpc" "main_vpc" {
 resource "aws_subnet" "public_1" {
   cidr_block = "10.0.0.0/24"
   vpc_id = aws_vpc.main_vpc.id
-  tags = {Name = "Public subnet 1"}
+  tags = {
+    Name = "Public subnet 1"
+  }
 }
 
 resource "aws_internet_gateway" "igw" {
@@ -96,4 +98,25 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
+resource "aws_security_group" "public_subnet" {
+  name = "HTTP_SSH"
+  description = "Allow ports 80, 443, 22"
+  vpc_id = aws_vpc.main_vpc.id
 
+  ingress {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+  }
+
+  
+  tags = {
+    Name = "Secrity group for public subnet HTTP and SSH"
+  }
+}

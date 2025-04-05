@@ -1,15 +1,15 @@
- terraform {
+terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "~> 5.0"
     }
   }
- }
+}
 
- provider "aws" {
+provider "aws" {
   region = "us-east-1"
- }
+}
 
 
 resource "aws_vpc" "main_vpc" {
@@ -22,7 +22,7 @@ resource "aws_vpc" "main_vpc" {
 
 resource "aws_subnet" "public_1" {
   cidr_block = "10.0.0.0/24"
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id     = aws_vpc.main_vpc.id
   tags = {
     Name = "Public subnet 1"
   }
@@ -37,7 +37,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_subnet" "private_1" {
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id     = aws_vpc.main_vpc.id
   cidr_block = "10.0.1.0/24"
 
   tags = {
@@ -46,7 +46,7 @@ resource "aws_subnet" "private_1" {
 }
 
 resource "aws_eip" "eip_ngw" {
-  vpc = true
+  vpc        = true
   depends_on = [aws_internet_gateway.igw]
   tags = {
     Name = "ELastic IP for NAT Gateway"
@@ -55,7 +55,7 @@ resource "aws_eip" "eip_ngw" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.eip_ngw
-  subnet_id = aws_subnet.public_1
+  subnet_id     = aws_subnet.public_1
 
   tags = {
     Name = "NAT Gateway"
@@ -76,7 +76,7 @@ resource "aws_route_table" "route_public_subnet" {
 }
 
 resource "aws_route_table_association" "route_public_association" {
-  subnet_id = aws_subnet.public_1.id
+  subnet_id      = aws_subnet.public_1.id
   route_table_id = aws_route_table.route_public_subnet.id
 }
 
@@ -94,29 +94,29 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private" {
-  subnet_id = aws_subnet.private_1.id
+  subnet_id      = aws_subnet.private_1.id
   route_table_id = aws_route_table.private.id
 }
 
 resource "aws_security_group" "public_subnet" {
-  name = "HTTP_SSH"
+  name        = "HTTP_SSH"
   description = "Allow ports 80, 443, 22"
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
     from_port = 443
-    to_port = 443
-    protocol = "tcp"
+    to_port   = 443
+    protocol  = "tcp"
   }
 
   egress {
     from_port = 0
-    to_port = 0
-    protocol = "-1"
+    to_port   = 0
+    protocol  = "-1"
   }
 
-  
+
   tags = {
-    Name = "Secrity group for public subnet HTTP and SSH"
+    Name = "Security group for public subnet HTTP and SSH"
   }
 }

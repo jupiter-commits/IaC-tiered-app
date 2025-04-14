@@ -1,16 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
-
-provider "aws" {
-  region = "us-east-1"
-}
-
 
 resource "aws_vpc" "main_vpc" {
   cidr_block = "10.0.0.0/16"
@@ -21,8 +8,10 @@ resource "aws_vpc" "main_vpc" {
 }
 
 resource "aws_subnet" "public_1" {
-  cidr_block = "10.0.0.0/24"
-  vpc_id     = aws_vpc.main_vpc.id
+  cidr_block        = "10.0.0.0/24"
+  vpc_id            = aws_vpc.main_vpc.id
+  availability_zone = ""
+
   tags = {
     Name = "Public subnet 1"
   }
@@ -37,8 +26,9 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_subnet" "private_1" {
-  vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "10.0.1.0/24"
+  vpc_id            = aws_vpc.main_vpc.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = ""
 
   tags = {
     Name = "Private subnet 1"
@@ -46,8 +36,9 @@ resource "aws_subnet" "private_1" {
 }
 
 resource "aws_eip" "eip_ngw" {
-  vpc        = true
+  domain     = true
   depends_on = [aws_internet_gateway.igw]
+
   tags = {
     Name = "ELastic IP for NAT Gateway"
   }

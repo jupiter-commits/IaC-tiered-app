@@ -9,4 +9,5 @@ Features of project:
 - workspaces
 - separate variables
 
-**Note:** This project started using Terraform resource blocks but then utilized the vpc module
+**Note:**
+This project used Terraform resource blocks at the start, but later decided to utilize the vpc module

@@ -10,4 +10,4 @@ Features of project:
 - separate variables
 
 **Note:**
-This project used Terraform resource blocks at the start, but later decided to utilize the vpc module
+This project used Terraform resource blocks at the start, but later decided to utilize the vpc module to be more modular and avoid repeating blocks

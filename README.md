@@ -10,4 +10,4 @@ Features of project:
 - separate variables
 
 **Note:**
-This project used Terraform resource blocks at the start, but later decided to utilize the vpc module to be more modular and avoid repeating blocks
+This project used Terraform resource blocks at the start ([resources branch](https://github.com/jupiter-commits/IaC-tiered-app/tree/resources)), but later decided to utilize the vpc module to be more modular and avoid repeating blocks

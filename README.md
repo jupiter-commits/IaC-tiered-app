@@ -11,3 +11,6 @@ Features of project:
 
 **Note:**
 This project used Terraform resource blocks at the start ([resources branch](https://github.com/jupiter-commits/IaC-tiered-app/tree/resources)), but later decided to utilize the vpc module to be more modular and avoid repeating blocks
+
+Network resources for subnets and route tables look like this:
+![](resources.png)

@@ -36,7 +36,7 @@ resource "aws_subnet" "private_1" {
 }
 
 resource "aws_eip" "eip_ngw" {
-  domain     = true
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.igw]
 
   tags = {
@@ -45,8 +45,8 @@ resource "aws_eip" "eip_ngw" {
 }
 
 resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.eip_ngw
-  subnet_id     = aws_subnet.public_1
+  allocation_id = aws_eip.eip_ngw.id
+  subnet_id     = aws_subnet.public_1.id
 
   tags = {
     Name = "NAT Gateway"
@@ -54,7 +54,7 @@ resource "aws_nat_gateway" "nat" {
 }
 
 resource "aws_route_table" "route_public_subnet" {
-  vpc_id = aws_vpc.main_vpc
+  vpc_id = aws_vpc.main_vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -72,7 +72,7 @@ resource "aws_route_table_association" "route_public_association" {
 }
 
 resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.main_vpc
+  vpc_id = aws_vpc.main_vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"

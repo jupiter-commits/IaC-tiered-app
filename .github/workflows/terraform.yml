@@ -16,8 +16,8 @@ jobs:
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
     steps:
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3

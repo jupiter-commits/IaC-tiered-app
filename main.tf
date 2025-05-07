@@ -22,16 +22,10 @@ module "vpc" {
   }
 }
 
-resource "aws_security_group" "public_subnet" {
+resource "aws_security_group" "public_subnet_egress" {
   name        = "HTTP_SSH"
-  description = "Allow ports 80, 443, 22"
-  vpc_id      = module.vpc.default_vpc_id /////
-
-  ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
-  }
+  description = "Allow egress traffic"
+  vpc_id      = module.vpc.default_vpc_id
 
   egress {
     from_port = 0
@@ -40,6 +34,6 @@ resource "aws_security_group" "public_subnet" {
   }
 
   tags = {
-    Name = "Security group for public subnet HTTP and SSH"
+    Name = "Security group for public subnet egress"
   }
 }

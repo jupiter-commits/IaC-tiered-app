@@ -1,9 +1,13 @@
+locals {
+  env_name = terraform.workspace
+}
+
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.19.0"
 
-  name = "main_environment"
+  name = "main_${locals.env_name}"
   cidr = "10.0.0.0/16"
 
   azs             = ["eu-west-3a", "eu-west-3b"]
@@ -15,5 +19,27 @@ module "vpc" {
 
   tags = {
     Environment = "main"
+  }
+}
+
+resource "aws_security_group" "public_subnet" {
+  name        = "HTTP_SSH"
+  description = "Allow ports 80, 443, 22"
+  vpc_id      = module.vpc.default_vpc_id /////
+
+  ingress {
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
+  }
+
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+  }
+
+  tags = {
+    Name = "Security group for public subnet HTTP and SSH"
   }
 }

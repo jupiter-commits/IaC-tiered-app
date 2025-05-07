@@ -23,7 +23,7 @@ module "vpc" {
 }
 
 resource "aws_security_group" "public_subnet_egress" {
-  name        = "HTTP_SSH"
+  name        = "allow_egress"
   description = "Allow egress traffic"
   vpc_id      = module.vpc.default_vpc_id
 

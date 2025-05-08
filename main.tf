@@ -18,22 +18,23 @@ module "vpc" {
   enable_nat_gateway           = false
 
   tags = {
-    Environment = "main"
+    Environment = "main_${locals.env_name}"
   }
 }
 
-resource "aws_security_group" "public_subnet_egress" {
-  name        = "allow_egress"
-  description = "Allow egress traffic"
+
+resource "aws_security_group" "public_subnet" {
+  name        = "public subnet web"
+  description = "Allow http, https, ssh ports for public subnets"
   vpc_id      = module.vpc.default_vpc_id
 
-  egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
-  }
-
   tags = {
-    Name = "Security group for public subnet egress"
+    Name = "public_subnet_security_group"
   }
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
+  security_group_id = aws_security_group.public_subnet.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
 }
